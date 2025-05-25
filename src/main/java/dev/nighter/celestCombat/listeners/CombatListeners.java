@@ -1,6 +1,7 @@
 package dev.nighter.celestCombat.listeners;
 
 import dev.nighter.celestCombat.CelestCombat;
+import dev.nighter.celestCombat.Scheduler;
 import dev.nighter.celestCombat.combat.CombatManager;
 import dev.nighter.celestCombat.language.MessageService;
 import org.bukkit.entity.Entity;
@@ -232,12 +233,14 @@ public class CombatListeners implements Listener {
 
             // Execute the command as the console with try-catch to handle potential errors
             try {
-                plugin.getServer().dispatchCommand(
-                        plugin.getServer().getConsoleSender(),
-                        finalCommand
-                );
-                // If we reached here, the command executed without throwing an exception
-                anyCommandSuccessful = true;
+                Scheduler.runTask(() -> {
+                    plugin.getServer().dispatchCommand(
+                            plugin.getServer().getConsoleSender(),
+                            finalCommand
+                    );
+                    // If we reached here, the command executed without throwing an exception
+                    anyCommandSuccessful = true;
+                });
             } catch (Exception e) {
                 // Log the error
                 plugin.getLogger().warning("Failed to execute kill reward command: " + finalCommand);
