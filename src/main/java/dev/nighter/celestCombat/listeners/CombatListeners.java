@@ -253,7 +253,7 @@ public class CombatListeners implements Listener {
         combatManager.setKillRewardCooldown(killer, victim);
 
         // Only notify the killer about rewards if at least one command succeeded
-        if (anyCommandSuccessful) {
+        if (anyCommandSuccessful.get()) {
             Map<String, String> placeholders = new HashMap<>();
             placeholders.put("killer", killer.getName());
             placeholders.put("victim", victim.getName());
