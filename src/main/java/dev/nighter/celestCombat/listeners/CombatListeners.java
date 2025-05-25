@@ -221,7 +221,7 @@ public class CombatListeners implements Listener {
         }
 
         // Flag to track if at least one command executed successfully
-        boolean anyCommandSuccessful = false;
+        AtomicBoolean anyCommandSuccessful = new AtomicBoolean(false);
 
         // Execute reward commands
         List<String> commands = plugin.getConfig().getStringList("kill_rewards.commands");
@@ -239,7 +239,7 @@ public class CombatListeners implements Listener {
                             finalCommand
                     );
                     // If we reached here, the command executed without throwing an exception
-                    anyCommandSuccessful = true;
+                    anyCommandSuccessful.set(true);
                 });
             } catch (Exception e) {
                 // Log the error
