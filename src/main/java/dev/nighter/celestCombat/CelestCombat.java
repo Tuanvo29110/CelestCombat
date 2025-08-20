@@ -1,6 +1,7 @@
 package dev.nighter.celestCombat;
 
 import com.sk89q.worldguard.WorldGuard;
+import dev.nighter.celestCombat.api.CelestCombatAPI;
 import dev.nighter.celestCombat.bstats.Metrics;
 import dev.nighter.celestCombat.combat.CombatManager;
 import dev.nighter.celestCombat.combat.DeathAnimationManager;
@@ -104,6 +105,8 @@ public final class CelestCombat extends JavaPlugin {
 
         commandManager = new CommandManager(this);
         commandManager.registerCommands();
+
+        CelestCombatAPI.setPlugin(this);
 
         setupBtatsMetrics();
 

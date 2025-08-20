@@ -155,9 +155,9 @@ public class MessageService {
             );
         }
 
-        // Action bar
+        // Action bar (only if globally enabled)
         String actionBar = languageManager.getActionBar(key, placeholders);
-        if (actionBar != null) {
+        if (actionBar != null && plugin.getConfig().getBoolean("enable_actionbar", true)) {
             player.spigot().sendMessage(
                     ChatMessageType.ACTION_BAR,
                     TextComponent.fromLegacyText(actionBar)

@@ -347,8 +347,13 @@ public class CombatListeners implements Listener {
         Player player = event.getPlayer();
 
         // If player is trying to enable flight
-        if (event.isFlying() && combatManager.shouldDisableFlight(player)) {
+        if (combatManager.shouldDisableFlight(player)) {
+            player.setFlying(false);
+            player.setAllowFlight(false);
             event.setCancelled(true);
+            Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("player", player.getName());
+            plugin.getMessageService().sendMessage(player, "combat_fly_disabled", placeholders);
         }
     }
 

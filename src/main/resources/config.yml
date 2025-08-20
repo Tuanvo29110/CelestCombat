@@ -18,6 +18,10 @@ language: en_US
 # Enable or disable debug mode (provides verbose console output)
 debug: false
 
+# Enable or disable actionbar display globally
+# If false, no actionbar messages will be sent (combat, cooldowns, protection, etc.)
+enable_actionbar: true
+
 #---------------------------------------------------
 #              CORE COMBAT SETTINGS
 #---------------------------------------------------
