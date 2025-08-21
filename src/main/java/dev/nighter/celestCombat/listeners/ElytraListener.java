@@ -26,7 +26,7 @@ public class ElytraListener implements Listener {
     private final CelestCombat plugin;
     private final CombatManager combatManager;
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onElytraUse(PlayerInteractEvent event) {
         if (!plugin.getConfig().getBoolean("elytra.block-gliding", true)) {
             return;
@@ -60,16 +60,8 @@ public class ElytraListener implements Listener {
         }
         
         ItemStack cursor = event.getCursor();
-        ItemStack current = event.getCurrentItem();
 
-        boolean isArmorSlot = event.getSlotType() == InventoryType.SlotType.ARMOR;
-        boolean isElytraCursor = cursor != null && cursor.getType() == Material.ELYTRA;
-        boolean isElytraCurrent = current != null && current.getType() == Material.ELYTRA;
-
-        if ((isArmorSlot && isElytraCursor)
-                || (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY && isElytraCurrent)
-                || (event.getAction() == InventoryAction.SWAP_WITH_CURSOR && isElytraCursor)) {
-                    
+        if (event.getSlotType() == InventoryType.SlotType.ARMOR && cursor != null && cursor.getType() == Material.ELYTRA) {
             if (combatManager.isInCombat(player)) {
                 event.setCancelled(true);
             }
