@@ -30,7 +30,6 @@ public class ElytraListener implements Listener {
         
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
-        Action action = event.getAction();
         
         if (item != null && item.getType() == Material.ELYTRA &&
                 (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) {
@@ -90,8 +89,7 @@ public class ElytraListener implements Listener {
         if (!player.isGliding()) return;
         
         player.setGliding(false);
-        player.teleportAsync(player.getLocation());
-        player.setFallDistance(-200);
+        player.setFallDistance(0);
         
         ItemStack chestplate = player.getInventory().getChestplate();
         if (chestplate == null || chestplate.getType() != Material.ELYTRA) return;
