@@ -11,7 +11,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -24,7 +26,7 @@ public class ElytraListener implements Listener {
     private final CelestCombat plugin;
     private final CombatManager combatManager;
 
-    /*@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onElytraUse(PlayerInteractEvent event) {
         if (!plugin.getConfig().getBoolean("elytra.block-gliding", true)) {
             return;
@@ -45,22 +47,23 @@ public class ElytraListener implements Listener {
                 plugin.getMessageService().sendMessage(player, "elytra_use_blocked_in_combat", placeholders);
             }
         }
-    }*/
+    }
     
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onInventoryDrag(InventoryDragEvent event) {
-        if (!(event.getInventory().getHolder() instanceof Player player)) return;
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (!event.getWhoClicked() instanceof Player player)) {
+            return;
+        }
+        
+        ItemStack cursor = event.getCursor();
+        ItemStack current = event.getCurrentItem();
 
-        if (!combatManager.isInCombat(player)) return;
-
-        ItemStack draggedItem = event.getOldCursor();
-        Set<Integer> slots = event.getRawSlots();
-
-        if (draggedItem != null 
-                && draggedItem.getType() == Material.ELYTRA 
-                && slots.contains(38)) {
-    
-            event.setCancelled(true);
+        if ((event.getSlotType() == InventoryType.SlotType.ARMOR && cursor != null && cursor.getType() == Material.ELYTRA)
+                || (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY && current != null && current.getType() == Material.ELYTRA)) {
+                
+            if (combatManager.isInCombat(player)) {
+                event.setCancelled(true);
+            }
         }
     }
     
