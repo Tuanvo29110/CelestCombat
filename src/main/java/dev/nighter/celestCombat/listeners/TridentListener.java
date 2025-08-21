@@ -159,20 +159,20 @@ public class TridentListener implements Listener {
 
         if (originalLocation != null) {
             // Method 2: Alternative approach - counter the velocity after a short delay
-            Scheduler.runTaskLater(() -> {
+            Scheduler.runEntityTaskLater(player, () -> {
                 if (player.isOnline()) {
                     // Stop any remaining velocity
                     player.setVelocity(player.getVelocity().multiply(0));
 
                     // Ensure they're at the original location
                     if (player.getLocation().distance(originalLocation) > 5) {
-                        player.teleport(originalLocation);
+                        player.teleportAsync(originalLocation);
                     }
                 }
             }, 2L);
         } else {
             // Fallback: just stop their velocity and add effects
-            Scheduler.runTask(() -> {
+            Scheduler.runEntityTask(player, () -> {
                 player.setVelocity(player.getVelocity().multiply(0));
             });
         }
