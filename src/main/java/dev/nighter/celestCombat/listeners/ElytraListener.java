@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RequiredArgsConstructor
 public class ElytraListener implements Listener {
@@ -59,7 +60,8 @@ public class ElytraListener implements Listener {
                 && draggedItem.getType() == Material.ELYTRA 
                 && slots.contains(38)) {
     
-        slots.remove(38);
+            slots.remove(38);
+        }
     }
     
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
