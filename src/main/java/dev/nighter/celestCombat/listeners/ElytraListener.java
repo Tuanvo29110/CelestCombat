@@ -88,18 +88,18 @@ public class ElytraListener implements Listener {
     }
     
     private void checkGlide(Player player) {
-		if (!player.isGliding()) return;
-		
-		player.setGliding(false);
-		player.teleportAsync(player.getLocation());
-		player.setFallDistance(-200);
-		
-		ItemStack chestplate = player.getInventory().getChestplate();
-		if (chestplate == null || chestplate.getType() != Material.ELYTRA) return;
-		player.getInventory().setChestplate(null);
-		Map<Integer, ItemStack> item = player.getInventory().addItem(chestplate);
-		if (!item.isEmpty())
-			player.getWorld().dropItemNaturally(player.getLocation(), item.values().stream().findFirst().orElse(chestplate));
-		}
-	}
+        if (!player.isGliding()) return;
+        
+        player.setGliding(false);
+        player.teleportAsync(player.getLocation());
+        player.setFallDistance(-200);
+        
+        ItemStack chestplate = player.getInventory().getChestplate();
+        if (chestplate == null || chestplate.getType() != Material.ELYTRA) return;
+        player.getInventory().setChestplate(null);
+        Map<Integer, ItemStack> item = player.getInventory().addItem(chestplate);
+        if (!item.isEmpty()) {
+            player.getWorld().dropItemNaturally(player.getLocation(), item.values().stream().findFirst().orElse(chestplate));
+        }
+    }
 }
