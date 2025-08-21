@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class ElytraListener implements Listener {
     private final CelestCombat plugin;
     private final CombatManager combatManager;
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    /*@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onElytraUse(PlayerInteractEvent event) {
         if (!plugin.getConfig().getBoolean("elytra.block-gliding", true)) {
             return;
@@ -43,6 +44,22 @@ public class ElytraListener implements Listener {
                 plugin.getMessageService().sendMessage(player, "elytra_use_blocked_in_combat", placeholders);
             }
         }
+    }*/
+    
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onInventoryDrag(InventoryDragEvent event) {
+        if (!(event.getInventory().getHolder() instanceof Player player)) return;
+
+        if (!combatManager.isInCombat(player)) return;
+
+        ItemStack draggedItem = event.getOldCursor();
+        Set<Integer> slots = event.getRawSlots();
+
+        if (draggedItem != null 
+                && draggedItem.getType() == Material.ELYTRA 
+                && slots.contains(38)) {
+    
+        slots.remove(38);
     }
     
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
