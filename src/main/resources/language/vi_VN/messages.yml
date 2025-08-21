@@ -28,6 +28,17 @@ combat_fly_disabled:
 item_use_blocked_in_combat:
   message: "&cBạn không thể sử dụng %item% khi đang trong combat!"
   sound: block.note_block.pling
+  
+# ------------------------------------------------------
+#                Elytra messages
+# ------------------------------------------------------
+elytra_use_blocked_in_combat:
+  action_bar: "&#E94E77Bạn không thể sử dụng Elytra khi đang combat!"
+  sound: block.note_block.pling
+
+elytra_firework_use_blocked_in_combat:
+  action_bar: "&#E94E77Bạn không thể sử dụng pháo hoa khi đang combat!"
+  sound: block.note_block.pling
 
 # ------------------------------------------------------
 #                Ender pearl messages

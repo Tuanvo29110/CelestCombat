@@ -30,6 +30,17 @@ item_use_blocked_in_combat:
   sound: block.note_block.pling
 
 # ------------------------------------------------------
+#                Elytra messages
+# ------------------------------------------------------
+elytra_use_blocked_in_combat:
+  action_bar: "&#E94E77You cannot use Elytra during combat!"
+  sound: block.note_block.pling
+
+elytra_firework_use_blocked_in_combat:
+  action_bar: "&#E94E77You cannot launch fireworks while gliding!"
+  sound: block.note_block.pling
+
+# ------------------------------------------------------
 #                Ender pearl messages
 # ------------------------------------------------------
 enderpearl_cooldown:

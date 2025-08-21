@@ -14,6 +14,7 @@ import dev.nighter.celestCombat.hooks.protection.WorldGuardHook;
 import dev.nighter.celestCombat.hooks.protection.GriefPreventionHook;
 import dev.nighter.celestCombat.listeners.ItemRestrictionListener;
 import dev.nighter.celestCombat.listeners.TridentListener;
+import dev.nighter.celestCombat.listeners.ElytraListener;
 import dev.nighter.celestCombat.protection.NewbieProtectionManager;
 import dev.nighter.celestCombat.rewards.KillRewardManager;
 import dev.nighter.celestCombat.updates.ConfigUpdater;
@@ -83,6 +84,8 @@ public final class CelestCombat extends JavaPlugin {
         getServer().getPluginManager().registerEvents(tridentListener, this);
 
         getServer().getPluginManager().registerEvents(new ItemRestrictionListener(this, combatManager), this);
+        
+        getServer().getPluginManager().registerEvents(new ElytraListener(this, combatManager), this);
 
         // WorldGuard integration
         if (hasWorldGuard && getConfig().getBoolean("safezone_protection.enabled", true)) {

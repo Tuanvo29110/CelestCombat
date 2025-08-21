@@ -9,7 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -61,29 +60,6 @@ public class ItemRestrictionListener implements Listener {
                 Map<String, String> placeholders = new HashMap<>();
                 placeholders.put("player", player.getName());
                 placeholders.put("item", formatItemName(item.getType()));
-                plugin.getMessageService().sendMessage(player, "item_use_blocked_in_combat", placeholders);
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onPlayerMoveEvent(PlayerMoveEvent event) {
-        // Check if item restrictions are enabled
-        if (!plugin.getConfig().getBoolean("combat.item_restrictions.enabled", true)) {
-            return;
-        }
-
-        Player player = event.getPlayer();
-
-        if (combatManager.isInCombat(player)) {
-            List<String> disabledItems = plugin.getConfig().getStringList("combat.item_restrictions.disabled_items");
-
-            if (disabledItems.contains("ELYTRA") && player.isGliding()) {
-                player.setGliding(false);
-
-                Map<String, String> placeholders = new HashMap<>();
-                placeholders.put("player", player.getName());
-                placeholders.put("item", "Elytra");
                 plugin.getMessageService().sendMessage(player, "item_use_blocked_in_combat", placeholders);
             }
         }

@@ -67,14 +67,23 @@ combat:
   # Disable flight (Creative fly) during combat
   disable_flight: false
 
-  # Items blocked during combat (Foods, Potions, Elytra)
+  # Items blocked during combat (Foods, Potions)
   item_restrictions:
     # Enable or disable item restrictions during combat
     enabled: false
-    # Items blocked during combat (Foods, Potions, Elytra)
+    # Items blocked during combat (Foods, Potions)
     disabled_items:
       - CHORUS_FRUIT
-      - ELYTRA
+
+#---------------------------------------------------
+#                 ELYTRA RESTRICTIONS
+#---------------------------------------------------
+elytra:
+  # Prevent players from gliding with an elytra while in combat
+  block-gliding: true
+
+  # Prevent players from using fireworks while gliding with an elytra in combat
+  block-fireworks: true
 
 #---------------------------------------------------
 #              ENDER PEARL RESTRICTIONS
