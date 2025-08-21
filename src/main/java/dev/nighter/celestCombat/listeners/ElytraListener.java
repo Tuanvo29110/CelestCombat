@@ -80,9 +80,8 @@ public class ElytraListener implements Listener {
                 event.setCancelled(true);
                 
                 Map<String, String> placeholders = new HashMap<>();
-                    placeholders.put("player", player.getName());
-                    plugin.getMessageService().sendMessage(player, "elytra_firework_use_blocked_in_combat", placeholders);
-                }
+                placeholders.put("player", player.getName());
+                plugin.getMessageService().sendMessage(player, "elytra_firework_use_blocked_in_combat", placeholders);
             }
         }
     }
