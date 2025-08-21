@@ -188,20 +188,21 @@ public class WorldGuardHook implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onProjectileHit(ProjectileHitEvent event) {
-        if (!(event.getEntity() instanceof EnderPearl)) return;
+        if (!(event.getEntity() instanceof EnderPearl pearl)) return;
 
-        Location hitLocation = event.getEntity().getLocation();
+        Location hitLocation = pearl.getLocation();
         if (!isEnabledInWorld(hitLocation)) return;
 
-        UUID projectileId = event.getEntity().getUniqueId();
+        UUID projectileId = pearl.getUniqueId();
         UUID playerUUID = combatPlayerPearls.remove(projectileId);
         if (playerUUID == null) return;
 
         Player player = plugin.getServer().getPlayer(playerUUID);
-        Location teleportDestination = calculateTeleportDestination(event, event.getEntity());
+        Location teleportDestination = calculateTeleportDestination(event, pearl);
 
         if (isSafeZone(teleportDestination)) {
             event.setCancelled(true);
+            pearl.remove();
             handlePearlTeleportBack(player, playerUUID);
         }
 
