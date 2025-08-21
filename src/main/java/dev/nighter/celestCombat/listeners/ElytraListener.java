@@ -20,7 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RequiredArgsConstructor
 public class ElytraListener implements Listener {
@@ -50,7 +49,7 @@ public class ElytraListener implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) {
             return;
@@ -63,26 +62,14 @@ public class ElytraListener implements Listener {
         ItemStack cursor = event.getCursor();
         ItemStack current = event.getCurrentItem();
 
-        if ((event.getSlotType() == InventoryType.SlotType.ARMOR && cursor != null && cursor.getType() == Material.ELYTRA)
-                || (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY && current != null && current.getType() == Material.ELYTRA)) {
-                
-            if (combatManager.isInCombat(player)) {
-                event.setCancelled(true);
-            }
-        }
-    }
-    
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onSwapHand(PlayerSwapHandItemsEvent event) {
-        Player player = event.getPlayer();
+        boolean isArmorSlot = event.getSlotType() == InventoryType.SlotType.ARMOR;
+        boolean isElytraCursor = cursor != null && cursor.getType() == Material.ELYTRA;
+        boolean isElytraCurrent = current != null && current.getType() == Material.ELYTRA;
 
-        ItemStack mainHand = event.getMainHandItem();
-        ItemStack offHand = event.getOffHandItem();
-        ItemStack chestplate = player.getInventory().getChestplate();
-
-        if ((mainHand != null && mainHand.getType() == Material.ELYTRA && chestplate == null)
-            || (offHand != null && offHand.getType() == Material.ELYTRA && chestplate == null)) {
-                
+        if ((isArmorSlot && isElytraCursor)
+                || (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY && isElytraCurrent)
+                || (event.getAction() == InventoryAction.SWAP_WITH_CURSOR && isElytraCursor)) {
+                    
             if (combatManager.isInCombat(player)) {
                 event.setCancelled(true);
             }
