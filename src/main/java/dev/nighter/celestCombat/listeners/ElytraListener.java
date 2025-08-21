@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -26,7 +27,7 @@ public class ElytraListener implements Listener {
     private final CelestCombat plugin;
     private final CombatManager combatManager;
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
     public void onElytraUse(PlayerInteractEvent event) {
         if (!plugin.getConfig().getBoolean("elytra.block-gliding", true)) {
             return;
@@ -48,6 +49,10 @@ public class ElytraListener implements Listener {
     
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
+        if (!plugin.getConfig().getBoolean("elytra.block-gliding", true)) {
+            return;
+        }
+        
         if (!(event.getWhoClicked() instanceof Player player)) {
             return;
         }
@@ -59,6 +64,22 @@ public class ElytraListener implements Listener {
         ItemStack cursor = event.getCursor();
 
         if (event.getSlotType() == InventoryType.SlotType.ARMOR && cursor != null && cursor.getType() == Material.ELYTRA) {
+            if (combatManager.isInCombat(player)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+    
+    public void onDispense(BlockDispenseArmorEvent event) {
+        if (!plugin.getConfig().getBoolean("elytra.block-gliding", true)) {
+            return;
+        }
+        
+        if (!(event.getTargetEntity() instanceof Player player)) {
+            return;
+        }
+        
+        if (event.getItem().getType() == Material.ELYTRA) {
             if (combatManager.isInCombat(player)) {
                 event.setCancelled(true);
             }
