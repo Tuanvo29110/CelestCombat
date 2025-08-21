@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryType;
@@ -55,11 +56,32 @@ public class ElytraListener implements Listener {
             return;
         }
         
+        if (!(event.getInventory().getHolder() instanceof Player)) {
+            return;
+        }
+        
         ItemStack cursor = event.getCursor();
         ItemStack current = event.getCurrentItem();
 
         if ((event.getSlotType() == InventoryType.SlotType.ARMOR && cursor != null && cursor.getType() == Material.ELYTRA)
                 || (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY && current != null && current.getType() == Material.ELYTRA)) {
+                
+            if (combatManager.isInCombat(player)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+    
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onSwapHand(PlayerSwapHandItemsEvent event) {
+        Player player = event.getPlayer();
+
+        ItemStack mainHand = event.getMainHandItem();
+        ItemStack offHand = event.getOffHandItem();
+        ItemStack chestplate = player.getInventory().getChestplate();
+
+        if ((mainHand != null && mainHand.getType() == Material.ELYTRA && chestplate == null)
+            || (offHand != null && offHand.getType() == Material.ELYTRA && chestplate == null)) {
                 
             if (combatManager.isInCombat(player)) {
                 event.setCancelled(true);
