@@ -201,8 +201,7 @@ public class WorldGuardHook implements Listener {
         Location teleportDestination = calculateTeleportDestination(event, pearl);
 
         if (isSafeZone(teleportDestination)) {
-            event.setCancelled(true);
-            Scheduler.runEntityTask(pearl, () -> pearl.remove());
+            pearl.remove());
             sendCooldownMessage(player, "combat_no_pearl_safezone");
             //handlePearlTeleportBack(player, playerUUID);
         }

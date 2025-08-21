@@ -60,7 +60,7 @@ public class ElytraListener implements Listener {
                 && draggedItem.getType() == Material.ELYTRA 
                 && slots.contains(38)) {
     
-            slots.remove(38);
+            event.setCancelled(true);
         }
     }
     
