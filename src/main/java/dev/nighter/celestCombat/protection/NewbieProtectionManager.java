@@ -2,6 +2,7 @@ package dev.nighter.celestCombat.protection;
 
 import dev.nighter.celestCombat.CelestCombat;
 import dev.nighter.celestCombat.Scheduler;
+import dev.nighter.celestCombat.api.events.NewbieProtectionEvent;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
@@ -30,9 +31,10 @@ public class NewbieProtectionManager {
     // Configuration cache
     private boolean enabled;
     private long protectionDurationTicks;
-    private long protectionDurationSeconds;
+    private long protectionDurationMillis;
     private boolean useBossBar;
     private boolean useActionBar;
+    private boolean enableActionbar;
     private String bossBarTitle;
     private BarColor bossBarColor;
     private BarStyle bossBarStyle;
@@ -75,10 +77,11 @@ public class NewbieProtectionManager {
 
         this.enabled = config.getBoolean("newbie_protection.enabled", true);
         this.protectionDurationTicks = plugin.getTimeFromConfig("newbie_protection.duration", "10m");
-        this.protectionDurationSeconds = protectionDurationTicks / 20;
+        this.protectionDurationMillis = protectionDurationTicks * 50;
+        this.enableActionbar = config.getBoolean("enable_actionbar", true);
 
         this.useBossBar = config.getBoolean("newbie_protection.display.use_bossbar", true);
-        this.useActionBar = config.getBoolean("newbie_protection.display.use_actionbar", false);
+        this.useActionBar = config.getBoolean("newbie_protection.display.use_actionbar", false) && enableActionbar;
         this.bossBarTitle = config.getString("newbie_protection.display.bossbar.title", "&#4CAF50PvP Protection: &#FFFFFF%time%");
 
         // Parse boss bar color
@@ -106,7 +109,7 @@ public class NewbieProtectionManager {
         loadWorldProtectionSettings();
 
         plugin.debug("NewbieProtectionManager config loaded - Enabled: " + enabled +
-                ", Duration: " + protectionDurationSeconds + "s" +
+                ", Duration: " + (protectionDurationMillis / 1000.0) + "s" +
                 ", Boss bar: " + useBossBar +
                 ", Action bar: " + useActionBar);
     }
@@ -240,20 +243,25 @@ public class NewbieProtectionManager {
             return;
         }
 
+        NewbieProtectionEvent event = new NewbieProtectionEvent(player, NewbieProtectionEvent.ProtectionAction.GRANTED, protectionDurationMillis);
+        Bukkit.getPluginManager().callEvent(event);
+        
+        if (event.isCancelled()) {
+            return;
+        }
+
         UUID playerUUID = player.getUniqueId();
-        long expirationTime = System.currentTimeMillis() + (protectionDurationSeconds * 1000L);
+        long expirationTime = System.currentTimeMillis() + protectionDurationMillis;
 
         protectedPlayers.put(playerUUID, expirationTime);
 
-        // Create boss bar if enabled
         if (useBossBar) {
             createBossBar(player);
         }
 
-        // Send protection granted message
         Map<String, String> placeholders = new HashMap<>();
         placeholders.put("player", player.getName());
-        placeholders.put("duration", formatTime(protectionDurationSeconds));
+        placeholders.put("duration", formatTime(protectionDurationMillis / 1000));
         plugin.getMessageService().sendMessage(player, "newbie_protection_granted", placeholders);
 
         plugin.debug("Granted newbie protection to " + player.getName() + " until " + new Date(expirationTime));
@@ -295,17 +303,40 @@ public class NewbieProtectionManager {
         if (player == null) return;
 
         UUID playerUUID = player.getUniqueId();
-        boolean hadProtection = protectedPlayers.remove(playerUUID) != null;
-
-        if (hadProtection) {
-            // Remove boss bar
-            BossBar bossBar = protectionBossBars.remove(playerUUID);
-            if (bossBar != null) {
-                bossBar.removeAll();
-            }
-
-            plugin.debug("Removed newbie protection from " + player.getName());
+        boolean hadProtection = protectedPlayers.containsKey(playerUUID);
+        
+        if (!hadProtection) {
+            return;
         }
+
+        long remainingTime = protectedPlayers.remove(playerUUID) - System.currentTimeMillis();
+        
+        NewbieProtectionEvent event = new NewbieProtectionEvent(player, NewbieProtectionEvent.ProtectionAction.REMOVED, Math.max(0, remainingTime));
+        Bukkit.getPluginManager().callEvent(event);
+
+        BossBar bossBar = protectionBossBars.remove(playerUUID);
+        if (bossBar != null) {
+            bossBar.removeAll();
+        }
+
+        plugin.debug("Removed newbie protection from " + player.getName());
+    }
+    
+    public void removeProtection(Player player) {
+        removeProtection(player, false);
+    }
+    
+    public long getRemainingProtectionMillis(Player player) {
+        if (player == null || !protectedPlayers.containsKey(player.getUniqueId())) {
+            return 0;
+        }
+        
+        long expirationTime = protectedPlayers.get(player.getUniqueId());
+        return Math.max(0, expirationTime - System.currentTimeMillis());
+    }
+    
+    public double getRemainingProtectionSeconds(Player player) {
+        return getRemainingProtectionMillis(player) / 1000.0;
     }
 
     /**
@@ -408,7 +439,7 @@ public class NewbieProtectionManager {
         bossBar.setTitle(title);
 
         // Update progress
-        double progress = Math.max(0.0, Math.min(1.0, (double) remainingTime / protectionDurationSeconds));
+        double progress = Math.max(0.0, Math.min(1.0, (double) remainingTime / (protectionDurationMillis / 1000.0)));
         bossBar.setProgress(progress);
     }
 
