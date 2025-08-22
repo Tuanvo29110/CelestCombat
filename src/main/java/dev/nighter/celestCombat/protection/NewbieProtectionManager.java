@@ -484,7 +484,7 @@ public class NewbieProtectionManager {
             updateTask.cancel();
         }
 
-        updateTask = Scheduler.runTaskTimer(() -> {
+        updateTask = Scheduler.runTaskTimerAsync(() -> {
             for (UUID playerUUID : new HashSet<>(protectedPlayers.keySet())) {
                 Player player = Bukkit.getPlayer(playerUUID);
                 if (player == null || !player.isOnline()) {

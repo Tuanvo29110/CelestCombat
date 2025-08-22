@@ -123,7 +123,7 @@ public class EnderPearlListener implements Listener {
         long updateInterval = 20L;
 
         // Create a new countdown task
-        Scheduler.Task task = Scheduler.runTaskTimer(() -> {
+        Scheduler.Task task = Scheduler.runTaskTimerAsync(() -> {
             // Check if player is still online
             if (!player.isOnline()) {
                 cancelPearlCountdown(playerUUID);
