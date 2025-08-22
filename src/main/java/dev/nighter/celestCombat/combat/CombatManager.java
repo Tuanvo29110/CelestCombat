@@ -194,7 +194,7 @@ public class CombatManager {
                     currentTime > entry.getValue() ||
                             Bukkit.getPlayer(entry.getKey()) == null
             );
-
+            
         }, 0L, COUNTDOWN_INTERVAL);
     }
 
@@ -343,9 +343,14 @@ public class CombatManager {
         if (task != null) {
             task.cancel();
         }
-
+        
         if (player.isOnline()) {
-            plugin.getMessageService().sendMessage(player, "combat_expired");
+            Scheduler.runEntityTask(player, () -> {
+                plugin.getMessageService().sendMessage(player, "combat_expired");
+                
+                player.setCooldown(Material.ENDER_PEARL, 0);
+                player.setCooldown(Material.TRIDENT, 0);
+            });
         }
     }
 

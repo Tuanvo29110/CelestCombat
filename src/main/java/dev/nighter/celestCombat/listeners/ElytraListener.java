@@ -129,7 +129,6 @@ public class ElytraListener implements Listener {
         if (!player.isGliding()) return;
         
         player.setGliding(false);
-        player.setFallDistance(0);
         
         ItemStack chestplate = player.getInventory().getChestplate();
         if (chestplate == null || chestplate.getType() != Material.ELYTRA) return;
