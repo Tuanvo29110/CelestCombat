@@ -151,7 +151,7 @@ public class CombatManager {
             globalCountdownTask.cancel();
         }
 
-        globalCountdownTask = Scheduler.runTaskTimer(() -> {
+        globalCountdownTask = Scheduler.runTaskTimerAsync(() -> {
             long currentTime = System.currentTimeMillis();
 
             // Process all players in a single timer tick
