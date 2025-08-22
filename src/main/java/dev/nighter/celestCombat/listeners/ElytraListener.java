@@ -70,6 +70,7 @@ public class ElytraListener implements Listener {
         }
     }
     
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onDispense(BlockDispenseArmorEvent event) {
         if (!plugin.getConfig().getBoolean("elytra.block-gliding", true)) {
             return;
@@ -99,7 +100,7 @@ public class ElytraListener implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
     public void onElytraFirework(PlayerInteractEvent event) {
         if (!plugin.getConfig().getBoolean("elytra.block-fireworks", true)) {
             return;
@@ -112,11 +113,8 @@ public class ElytraListener implements Listener {
         }
         
         ItemStack item = event.getItem();
-        Action action = event.getAction();
         
-        if (item != null && item.getType() == Material.FIREWORK_ROCKET &&
-                (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) {
-                    
+        if (item != null && item.getType() == Material.FIREWORK_ROCKET && event.getAction().isRightClick()) {
             if (combatManager.isInCombat(player)) {
                 event.setCancelled(true);
                 
