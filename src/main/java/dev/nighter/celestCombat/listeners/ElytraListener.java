@@ -47,7 +47,7 @@ public class ElytraListener implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
     public void onInventoryClick(InventoryClickEvent event) {
         if (!plugin.getConfig().getBoolean("elytra.block-gliding", true)) {
             return;
@@ -70,7 +70,7 @@ public class ElytraListener implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
     public void onDispense(BlockDispenseArmorEvent event) {
         if (!plugin.getConfig().getBoolean("elytra.block-gliding", true)) {
             return;
@@ -87,7 +87,7 @@ public class ElytraListener implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (!plugin.getConfig().getBoolean("elytra.block-gliding", true)) {
             return;

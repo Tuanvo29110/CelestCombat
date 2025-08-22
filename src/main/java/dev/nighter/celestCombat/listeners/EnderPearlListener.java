@@ -32,7 +32,7 @@ public class EnderPearlListener implements Listener {
     // Track thrown ender pearls to their player owners
     private final Map<Integer, UUID> activePearls = new ConcurrentHashMap<>();
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
     public void onEnderPearlUse(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
@@ -56,7 +56,7 @@ public class EnderPearlListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
         if (event.getEntity() instanceof EnderPearl && event.getEntity().getShooter() instanceof Player) {
             Player player = (Player) event.getEntity().getShooter();
@@ -85,7 +85,7 @@ public class EnderPearlListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
     public void onProjectileHit(ProjectileHitEvent event) {
         if (event.getEntity() instanceof EnderPearl) {
             // Get the pearl's entity ID

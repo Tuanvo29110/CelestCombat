@@ -135,7 +135,7 @@ public class TridentListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
     public void onProjectileHit(ProjectileHitEvent event) {
         if (event.getEntity() instanceof Trident) {
             // Get the trident's entity ID
