@@ -471,7 +471,7 @@ public class CombatManager {
         enderPearlCooldowns.put(player.getUniqueId(),
                 System.currentTimeMillis() + enderPearlCooldownMillis);
                 
-        player.setCooldown(Material.ENDER_PEARL, (int)(enderPearlCooldownMillis / 50));
+        Scheduler.runEntityTask(player, () -> player.setCooldown(Material.ENDER_PEARL, (int)(enderPearlCooldownMillis / 50)));
     }
 
     public boolean isEnderPearlOnCooldown(Player player) {
@@ -503,7 +503,7 @@ public class CombatManager {
 
         if (currentTime > cooldownEndTime) {
             enderPearlCooldowns.remove(playerUUID);
-            player.setCooldown(Material.ENDER_PEARL, 0);
+            Scheduler.runEntityTask(player, () -> player.setCooldown(Material.ENDER_PEARL, 0));
             return false;
         }
 
@@ -601,7 +601,7 @@ public class CombatManager {
         tridentCooldowns.put(player.getUniqueId(),
                 System.currentTimeMillis() + tridentCooldownMillis);
                 
-        player.setCooldown(Material.TRIDENT, (int)(tridentCooldownMillis / 50));
+        Scheduler.runEntityTask(player, () -> player.setCooldown(Material.TRIDENT, (int)(tridentCooldownMillis / 50)));
     }
 
     public boolean isTridentOnCooldown(Player player) {
@@ -633,7 +633,7 @@ public class CombatManager {
 
         if (currentTime > cooldownEndTime) {
             tridentCooldowns.remove(playerUUID);
-            player.setCooldown(Material.TRIDENT, 0);
+            Scheduler.runEntityTask(player, () -> player.setCooldown(Material.TRIDENT, 0));
             return false;
         }
 
