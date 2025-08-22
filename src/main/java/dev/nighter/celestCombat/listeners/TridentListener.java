@@ -38,7 +38,7 @@ public class TridentListener implements Listener {
     // Store original locations for riptide rollback
     private final Map<UUID, Location> riptideOriginalLocations = new ConcurrentHashMap<>();
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
     public void onTridentUse(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
@@ -75,7 +75,7 @@ public class TridentListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onRiptideUse(PlayerRiptideEvent event) {
         Player player = event.getPlayer();
 
@@ -106,7 +106,7 @@ public class TridentListener implements Listener {
         riptideOriginalLocations.remove(player.getUniqueId());
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
         if (event.getEntity() instanceof Trident && event.getEntity().getShooter() instanceof Player) {
             Player player = (Player) event.getEntity().getShooter();
@@ -172,7 +172,7 @@ public class TridentListener implements Listener {
             }, 2L);
         } else {
             // Fallback: just stop their velocity and add effects
-            Scheduler.runEntityTask(player, () -> {
+            Scheduler.runEntityTask(() -> {
                 player.setVelocity(player.getVelocity().multiply(0));
             });
         }
