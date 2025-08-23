@@ -45,8 +45,7 @@ public class TridentListener implements Listener {
         Action action = event.getAction();
 
         // Check if player is right-clicking with a trident
-        if (item != null && item.getType() == Material.TRIDENT &&
-                (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) {
+        if (item != null && item.getType() == Material.TRIDENT && action.isRightClick()) {
 
             // Check if trident usage is banned in this world
             if (combatManager.isTridentBanned(player)) {

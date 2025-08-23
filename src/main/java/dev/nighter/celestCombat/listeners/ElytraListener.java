@@ -35,8 +35,9 @@ public class ElytraListener implements Listener {
         
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
+        Action action = event.getAction();
         
-        if (item != null && item.getType() == Material.ELYTRA && event.getAction().isRightClick()) {
+        if (item != null && item.getType() == Material.ELYTRA && action.isRightClick()) {
             if (combatManager.isInCombat(player)) {
                 event.setCancelled(true);
                 
@@ -113,8 +114,9 @@ public class ElytraListener implements Listener {
         }
         
         ItemStack item = event.getItem();
+        Action action = event.getAction();
         
-        if (item != null && item.getType() == Material.FIREWORK_ROCKET && event.getAction().isRightClick()) {
+        if (item != null && item.getType() == Material.FIREWORK_ROCKET && action.isRightClick()) {
             if (combatManager.isInCombat(player)) {
                 event.setCancelled(true);
                 
