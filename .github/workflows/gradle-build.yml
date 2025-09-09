@@ -71,7 +71,7 @@ jobs:
         with:
           title: "CelestCombat ${{ env.VERSION }}"
           automatic_release_tag: "${{ env.VERSION }}"
-          files: build/libs/CelestCombat-${{ env.VERSION }}.jar
+          files: build/libs/*.jar
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
 
